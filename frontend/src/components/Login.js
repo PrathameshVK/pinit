@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import {FcGoogle} from 'react-icons/fc';
 import bgVideo from '../assets/bg.mp4';
 import pinitLogo from '../assets/pinit_logo_white.png';
+import { client } from '../client';
 
 const Login = () => {
+    const navigate=useNavigate();
     const responseGoogle=(response)=>{
         //get userinfo from google sign-in response and save to local storage
         localStorage.setItem('user',JSON.stringify(response.profileObj));
@@ -16,6 +18,12 @@ const Login = () => {
             userName: name,
             image: imageUrl
         }
+
+        //this method creates new document if it doesn't already exist in the database
+        client.createIfNotExists(doc)
+        .then(()=>{
+            navigate('/',{replace: true})
+        })
     }
     return (
         <div className='flex justify-start items-center flex-col h-screen'>
